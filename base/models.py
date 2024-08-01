@@ -31,6 +31,12 @@ class Sport(models.Model):
 class User(AbstractUser):
     email = models.EmailField(unique=True)
     isTrainer = models.BooleanField(default=False)
+
+    class Gender(models.TextChoices):
+        MALE = "M", _("Male")
+        FEMALE = "F", _("Female")
+        NOTSPECIFY = "N", _("Not specify")
+    gender = models.CharField(max_length=1, choices=Gender.choices, default=Gender.NOTSPECIFY)
     dob = models.DateField(blank=True, null=True)
     bio = models.TextField(blank=True)
     phone = models.CharField(max_length=20, blank=True)
