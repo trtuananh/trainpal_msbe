@@ -1,12 +1,12 @@
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
-from .models import User
+from . import models
 
 
 class MyUserCreationForm(UserCreationForm):
     class Meta:
-        model = User
-        fields = ['name', 'username', 'email', 'password1', 'password2']
+        model = models.User
+        fields = ['first_name', "last_name", 'username', 'email', 'password1', 'password2']
 
 
 # class RoomForm(ModelForm):
@@ -18,5 +18,13 @@ class MyUserCreationForm(UserCreationForm):
 
 class UserForm(ModelForm):
     class Meta:
-        model = User
-        fields = ['avatar', 'name', 'username', 'email', 'bio']
+        model = models.User
+        # fields = ['first_name', 'last_name']
+        fields = ['first_name', 'last_name', 'username', 'email', 'isTrainer',
+                  'gender', 'dob', 'bio', 'phone', 'avatar', 'sports']
+        
+
+class LocationForm(ModelForm):
+    class Meta:
+        model = models.Location
+        fields = '__all__'

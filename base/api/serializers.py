@@ -1,9 +1,15 @@
 from rest_framework.serializers import ModelSerializer
-# from base.models import Room
+from base import models
 
 
-# class RoomSerializer(ModelSerializer):
-#     class Meta:
-#         model = Room
-#         fields = '__all__'
+class UserSerializer(ModelSerializer):
+    class Meta:
+        model = models.User
+        # fields = '__all__'
+        exclude = ['password']
 
+
+class LocationSerializer(ModelSerializer):
+    class Meta:
+        model = models.Location
+        fields = '__all__'
