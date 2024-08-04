@@ -109,10 +109,14 @@ class EBankingMethod(models.Model):
 
 
 class PaymentHistory(models.Model):
-    send_method = models.ForeignKey(PaymentMethod, models.RESTRICT, related_name="send_method")
-    receive_method = models.ForeignKey(PaymentMethod, models.RESTRICT, related_name="receive_method")
+    sender = models.ForeignKey(User, models.RESTRICT, related_name="sender")
+    receiver = models.ForeignKey(User, models.RESTRICT, related_name="receiver")
+
+    send_method = models.ForeignKey(PaymentMethod, models.SET_NULL, null=True, related_name="send_method")
+    receive_method = models.ForeignKey(PaymentMethod, models.SET_NULL, null=True, related_name="receive_method")
 
     value = models.IntegerField()
+    message = models.CharField(max_length=1000, blank=True)
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
@@ -125,12 +129,12 @@ class PaymentHistory(models.Model):
 
 class ChatRoom(models.Model):
     name = models.CharField(max_length=500, blank=True)
-    users = models.ManyToManyField(User, related_name="users")
+    users = models.ManyToManyField(User)
 
 
 class Message(models.Model):
     sender = models.ForeignKey(User, models.RESTRICT)
-    room = models.ForeignKey(ChatRoom, models.RESTRICT)
+    room = models.ForeignKey(ChatRoom, models.CASCADE)
     content = models.TextField()
 
     created = models.DateTimeField(auto_now_add=True)
@@ -168,31 +172,31 @@ class Course(models.Model):
         return f"{self.title[:50]} - {self.trainer}"
 
 
-class AvailableSession(models.Model):
-    course = models.ForeignKey(Course, models.CASCADE)
-    start = models.DateTimeField()
-    end = models.DateTimeField()
+# class AvailableSession(models.Model):
+#     course = models.ForeignKey(Course, models.CASCADE)
+#     start = models.DateTimeField()
+#     end = models.DateTimeField()
 
-    class Meta:
-        ordering = ['start']
+#     class Meta:
+#         ordering = ['start']
 
-    def __str__(self) -> str:
-        return f"{self.course}: from {self.start} to {self.end}"
+#     def __str__(self) -> str:
+#         return f"{self.course}: from {self.start} to {self.end}"
 
 
 class TrainingSession(models.Model):
     course = models.ForeignKey(Course, models.SET_NULL, null=True)
     start = models.DateTimeField()
-    duration = models.FloatField() # hours
-    roomm = models.ForeignKey(ChatRoom, models.SET_NULL, blank=True, null=True)
-    n_trainees = models.IntegerField(default=1)
+    end = models.DateTimeField()
+    room = models.ForeignKey(ChatRoom, models.SET_NULL, blank=True, null=True)
 
-    class TrainingState(models.TextChoices):
+    class SessionState(models.TextChoices):
+        AVAILABLE = "AV", _("Available")
         UPCOMING = "UP", _("Up Coming")
         DURING = "DR", _("During Training")
         FINISH = "FN", _("Finished")
 
-    state = models.CharField(max_length=2, choices=TrainingState.choices)
+    state = models.CharField(max_length=2, choices=SessionState.choices, default=SessionState.AVAILABLE)
 
     class Meta:
         ordering = ['start']
@@ -212,13 +216,11 @@ class BookingSession(models.Model):
 
 class Rating(models.Model):
     user = models.ForeignKey(User, models.CASCADE)
-    course = models.ForeignKey(Course, models.CASCADE)
+    booking_session = models.ForeignKey(BookingSession, models.CASCADE)
     rating = models.FloatField()
     comment = models.TextField(blank=True)
 
     def __str__(self):
         return f"{self.course} - {self.user} ({self.rating}/5)"
-
-
 
 # endregion

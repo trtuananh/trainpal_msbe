@@ -9,13 +9,6 @@ class MyUserCreationForm(UserCreationForm):
         fields = ['first_name', "last_name", 'username', 'email', 'password1', 'password2']
 
 
-# class RoomForm(ModelForm):
-#     class Meta:
-#         model = Room
-#         fields = '__all__'
-#         exclude = ['host', 'participants']
-
-
 class UserForm(ModelForm):
     class Meta:
         model = models.User
@@ -27,4 +20,65 @@ class UserForm(ModelForm):
 class LocationForm(ModelForm):
     class Meta:
         model = models.Location
+        exclude = ['user']
+
+
+class PaymentMethodForm(ModelForm):
+    class Meta:
+        model = models.PaymentMethod
+        # fields = ["payment_type", "info"]
+        exclude = ['user']
+
+
+class CardMethodForm(ModelForm):
+    class Meta:
+        model = models.CardMethod
+        exclude = ['payment_method']
+
+
+class EBankingMethodForm(ModelForm):
+    class Meta:
+        model = models.EBankingMethod
+        exclude = ['payment_method']
+
+
+class PaymentHistoryForm(ModelForm):
+    class Meta:
+        model = models.PaymentHistory
+        exclude = ['sender']
+
+
+class ChatRoomForm(ModelForm):
+    class Meta:
+        model = models.ChatRoom
         fields = '__all__'
+
+
+class MessageForm(ModelForm):
+    class Meta:
+        model = models.Message
+        exclude = ['sender']
+
+
+class CourseForm(ModelForm):
+    class Meta:
+        model = models.Course
+        exclude = ['trainer']
+
+
+class TrainingSessionForm(ModelForm):
+    class Meta:
+        model = models.TrainingSession
+        fields = '__all__'
+
+
+class BookingSessionForm(ModelForm):
+    class Meta:
+        model = models.BookingSession
+        exclude = ['user']
+
+
+class RatingForm(ModelForm):
+    class Meta:
+        model = models.Rating
+        exclude = ['user']
