@@ -50,24 +50,25 @@ class User(AbstractUser):
 
 # endregion
 
+
 # region > Location
 
 class Location(models.Model):
     name = models.CharField(max_length=200, blank=True)
     address = models.TextField()
     image = models.ImageField(blank=True, null=True)
-    user = models.ForeignKey(User, models.RESTRICT)
+    user = models.ForeignKey(User, models.CASCADE)
 
     def __str__(self) -> str:
         return f"{self.user}: {self.address[:20]}"
 
-
 # endregion
+
 
 # region > Payment
 
 class PaymentMethod(models.Model):
-    user = models.ForeignKey(User, models.RESTRICT)
+    user = models.ForeignKey(User, models.CASCADE, null=True)
 
     class PaymentType(models.TextChoices):
         CARD = "CD", _("Card")
@@ -109,8 +110,8 @@ class EBankingMethod(models.Model):
 
 
 class PaymentHistory(models.Model):
-    sender = models.ForeignKey(User, models.RESTRICT, related_name="sender")
-    receiver = models.ForeignKey(User, models.RESTRICT, related_name="receiver")
+    sender = models.ForeignKey(User, models.SET_NULL, null=True, related_name="sender")
+    receiver = models.ForeignKey(User, models.SET_NULL, null=True, related_name="receiver")
 
     send_method = models.ForeignKey(PaymentMethod, models.SET_NULL, null=True, related_name="send_method")
     receive_method = models.ForeignKey(PaymentMethod, models.SET_NULL, null=True, related_name="receive_method")
@@ -125,15 +126,17 @@ class PaymentHistory(models.Model):
 
 # endregion
 
+
 # region > Messages
 
 class ChatRoom(models.Model):
     name = models.CharField(max_length=500, blank=True)
+    host = models.ForeignKey(User, models.SET_NULL, blank=True, null=True, related_name='host')
     users = models.ManyToManyField(User)
 
 
 class Message(models.Model):
-    sender = models.ForeignKey(User, models.RESTRICT)
+    sender = models.ForeignKey(User, models.SET_NULL, null=True)
     room = models.ForeignKey(ChatRoom, models.CASCADE)
     content = models.TextField()
 
@@ -145,13 +148,13 @@ class Message(models.Model):
     def __str__(self) -> str:
         return f"{self.sender} to {self.room}: {self.content}"
 
-
 # endregion
+
 
 # region > Booking
 
 class Course(models.Model):
-    trainer = models.ForeignKey(User, models.RESTRICT)
+    trainer = models.ForeignKey(User, models.CASCADE, null=True)
     sport = models.ForeignKey(Sport, models.RESTRICT)
     title = models.CharField(max_length=500)
     description = models.TextField(blank=True)
@@ -170,18 +173,6 @@ class Course(models.Model):
 
     def __str__(self) -> str:
         return f"{self.title[:50]} - {self.trainer}"
-
-
-# class AvailableSession(models.Model):
-#     course = models.ForeignKey(Course, models.CASCADE)
-#     start = models.DateTimeField()
-#     end = models.DateTimeField()
-
-#     class Meta:
-#         ordering = ['start']
-
-#     def __str__(self) -> str:
-#         return f"{self.course}: from {self.start} to {self.end}"
 
 
 class TrainingSession(models.Model):

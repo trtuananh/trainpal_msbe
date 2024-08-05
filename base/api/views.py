@@ -442,7 +442,7 @@ def deleteTrainingSession(request, pk):
             training_session.delete()
             return Response({"success": True})
         else:
-            return Response('success': False, "message": "Can't delete training session")
+            return Response({'success': False, "message": "Can't delete training session"})
     except Exception as e:
         return Response({"success": False, "message": str(e)})
 
