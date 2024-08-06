@@ -30,17 +30,18 @@ class Sport(models.Model):
 
 class User(AbstractUser):
     email = models.EmailField(unique=True)
-    isTrainer = models.BooleanField(default=False)
+    isTrainer = models.BooleanField(blank=True, default=False)
 
     class Gender(models.TextChoices):
         MALE = "M", _("Male")
         FEMALE = "F", _("Female")
         NOTSPECIFY = "N", _("Not specify")
-    gender = models.CharField(max_length=1, choices=Gender.choices, default=Gender.NOTSPECIFY, blank=True)
+
+    gender = models.CharField(max_length=1, choices=Gender.choices, blank=True, default=Gender.NOTSPECIFY)
     dob = models.DateField(blank=True, null=True)
     bio = models.TextField(blank=True)
     phone = models.CharField(max_length=20, blank=True)
-    avatar = models.ImageField(default="avatar.svg")
+    avatar = models.ImageField(blank=True, default="avatar.svg")
     
     sports = models.ManyToManyField(Sport, related_name='sports')
 
@@ -110,11 +111,11 @@ class EBankingMethod(models.Model):
 
 
 class PaymentHistory(models.Model):
-    sender = models.ForeignKey(User, models.SET_NULL, null=True, related_name="sender")
-    receiver = models.ForeignKey(User, models.SET_NULL, null=True, related_name="receiver")
+    sender = models.ForeignKey(User, models.SET_NULL, null=True, related_name="sending")
+    receiver = models.ForeignKey(User, models.SET_NULL, null=True, related_name="receiving")
 
-    send_method = models.ForeignKey(PaymentMethod, models.SET_NULL, null=True, related_name="send_method")
-    receive_method = models.ForeignKey(PaymentMethod, models.SET_NULL, null=True, related_name="receive_method")
+    send_method = models.ForeignKey(PaymentMethod, models.SET_NULL, null=True, related_name="sending")
+    receive_method = models.ForeignKey(PaymentMethod, models.SET_NULL, null=True, related_name="receiving")
 
     value = models.IntegerField()
     message = models.CharField(max_length=1000, blank=True)
@@ -187,7 +188,7 @@ class TrainingSession(models.Model):
         DURING = "DR", _("During Training")
         FINISH = "FN", _("Finished")
 
-    state = models.CharField(max_length=2, choices=SessionState.choices, default=SessionState.AVAILABLE)
+    state = models.CharField(max_length=2, choices=SessionState.choices, blank=True, default=SessionState.AVAILABLE)
 
     class Meta:
         ordering = ['start']

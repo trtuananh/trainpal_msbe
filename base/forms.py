@@ -12,9 +12,8 @@ class MyUserCreationForm(UserCreationForm):
 class UserForm(ModelForm):
     class Meta:
         model = models.User
-        fields = ['first_name', 'last_name', 'username', 'email', 'isTrainer']
-        # fields = ['first_name', 'last_name', 'username', 'email', 'isTrainer',
-        #           'gender', 'dob', 'bio', 'phone', 'avatar', 'sports']
+        fields = ['first_name', 'last_name', 'username', 'email', 'isTrainer',
+                  'gender', 'dob', 'bio', 'phone', 'avatar']
         
 
 class LocationForm(ModelForm):
@@ -45,7 +44,7 @@ class EBankingMethodForm(ModelForm):
 class PaymentHistoryForm(ModelForm):
     class Meta:
         model = models.PaymentHistory
-        exclude = ['sender']
+        exclude = ['sender', 'receiver']
 
 
 class ChatRoomForm(ModelForm):

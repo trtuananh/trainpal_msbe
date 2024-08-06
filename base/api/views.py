@@ -102,6 +102,13 @@ def updateProfile(request):
 # endregion
 
 
+# region > Sport
+
+
+
+# endregion
+
+
 # region > Location
 
 @login_required(login_url='api-login')
@@ -155,7 +162,7 @@ def getPaymentMethods(request):
         data = srl.PaymentMethodSerializer(method, many=False).data
 
         print(method.payment_type)
-        if method.payment_type == 'CR':
+        if method.payment_type == 'CD':
             data['info'] = srl.CarMethodSerializer(method.cardmethod, many=False).data
         elif method.payment_type == 'EB':
             data['info'] = srl.EBankingMethodSerializer(method.ebankingmethod, many=False).data
@@ -215,11 +222,20 @@ def makePayment(request):
     if form.is_valid():
         payment_history = form.save(commit=False)
         payment_history.sender = sender
+        payment_history.receiver = payment_history.receive_method.user
         payment_history.save()
         return Response({'success': True})
     
     else:
         return Response({"success": False, "message": "invalid form"})
+
+
+@login_required(login_url='api-login')
+@api_view(['GET'])
+def getPaymentHistory(request):
+    user = request.user
+    serializer = srl.PaymentHistorySerializer(user.sending.all(), many=True)
+    return Response(serializer.data)
 
 # endregion
 
@@ -389,6 +405,7 @@ def addTrainingSession(request):
                 if update_session.state != "AV":
                     return Response({"success": False, "message": "Schedule conflict"})
                 update_session.end = training_session.start
+                update_session.save()
             except: 
                 pass
 
@@ -398,6 +415,7 @@ def addTrainingSession(request):
                 if update_session.state != "AV":
                     return Response({"success": False, "message": "Schedule conflict"})
                 update_session.start = training_session.end
+                update_session.save()
             except: 
                 pass
 
@@ -417,12 +435,14 @@ def addTrainingSession(request):
                 if update_session.state != "AV":
                     return Response({"success": False, "message": "Schedule conflict"})
                 update_session.end = training_session.start
+                update_session.save()
 
-                split_session = form.save(commit=False)
+                split_session = forms.TrainingSessionForm(request.data).save(commit=False)
                 split_session.start = training_session.end
+                split_session.end = update_session.end
                 split_session.save()
-            except: 
-                pass
+            except Exception as e: 
+                print(e)
 
             training_session.save()
             return Response({"success": True})
@@ -509,17 +529,3 @@ def addRating(request):
         return Response({"success": False, "message": "invalid form"})
     
 # endregion
-
-
-@api_view(['GET'])
-def getRooms(request):
-    rooms = Room.objects.all()
-    serializer = RoomSerializer(rooms, many=True)
-    return Response(serializer.data)
-
-
-@api_view(['GET'])
-def getRoom(request, pk):
-    room = Room.objects.get(id=pk)
-    serializer = RoomSerializer(room, many=False)
-    return Response(serializer.data)

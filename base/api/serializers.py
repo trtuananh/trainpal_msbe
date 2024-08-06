@@ -11,7 +11,7 @@ class UserSerializer(ModelSerializer):
 class LocationSerializer(ModelSerializer):
     class Meta:
         model = models.Location
-        exclude = ['user']
+        fields = '__all__'
 
 
 class PaymentMethodSerializer(ModelSerializer):
@@ -29,6 +29,12 @@ class CarMethodSerializer(ModelSerializer):
 class EBankingMethodSerializer(ModelSerializer):
     class Meta:
         model = models.EBankingMethod
+        fields = '__all__'
+
+
+class PaymentHistorySerializer(ModelSerializer):
+    class Meta:
+        model = models.PaymentHistory
         fields = '__all__'
 
 
