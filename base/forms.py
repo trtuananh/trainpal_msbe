@@ -6,15 +6,15 @@ from . import models
 class MyUserCreationForm(UserCreationForm):
     class Meta:
         model = models.User
-        fields = ['first_name', "last_name", 'username', 'email', 'password1', 'password2']
+        fields = ['first_name', "last_name", 'username', 'isTrainer', 'email', 'password1', 'password2']
 
 
 class UserForm(ModelForm):
     class Meta:
         model = models.User
-        # fields = ['first_name', 'last_name']
-        fields = ['first_name', 'last_name', 'username', 'email', 'isTrainer',
-                  'gender', 'dob', 'bio', 'phone', 'avatar', 'sports']
+        fields = ['first_name', 'last_name', 'username', 'email', 'isTrainer']
+        # fields = ['first_name', 'last_name', 'username', 'email', 'isTrainer',
+        #           'gender', 'dob', 'bio', 'phone', 'avatar', 'sports']
         
 
 class LocationForm(ModelForm):

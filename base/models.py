@@ -36,7 +36,7 @@ class User(AbstractUser):
         MALE = "M", _("Male")
         FEMALE = "F", _("Female")
         NOTSPECIFY = "N", _("Not specify")
-    gender = models.CharField(max_length=1, choices=Gender.choices, default=Gender.NOTSPECIFY)
+    gender = models.CharField(max_length=1, choices=Gender.choices, default=Gender.NOTSPECIFY, blank=True)
     dob = models.DateField(blank=True, null=True)
     bio = models.TextField(blank=True)
     phone = models.CharField(max_length=20, blank=True)

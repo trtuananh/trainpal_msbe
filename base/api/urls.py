@@ -10,6 +10,8 @@ urlpatterns = [
     path('profile/<str:pk>/', views.userProfile, name="api-user-profile"),
     path('update-profile/', views.updateProfile, name="api-update-user"),
 
+    path('sport/', views.getLocations, name="api-location"),
+
     path('location/', views.getLocations, name="api-location"),
     path('add-location/', views.addLocation, name="api-add-location"),
     path('delete-location/<str:pk>/', views.deleteLocation, name="api-delete-location"),
