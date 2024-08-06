@@ -29,6 +29,7 @@ urlpatterns = [
 
     path('course/', views.getCourses, name="api-courses"),
     path('course/<str:pk>/', views.getCourse, name="api-course"),
+    path('course/<str:course_pk>/rating', views.getRatings, name="api-course"),
     path('create-course/', views.createCourse, name="api-create-course"),
     path('update-course/', views.updateCourse, name="api-update-course"),
     path('delete-course/<str:pk>/', views.deleteCourse, name="api-delete-course"),
@@ -38,6 +39,10 @@ urlpatterns = [
     path('add-training/', views.addTrainingSession, name="api-add-training-session"),
     path('delete-training/<str:pk>/', views.deleteTrainingSession, name="api-add-training-session"),
 
-    # path('rooms/', views.getRooms),
-    # path('rooms/<str:pk>/', views.getRoom),
+    path('booking/', views.getBookingSessions, name="api-booking-sessions"),
+    path('booking/<str:pk>/', views.getBookingSession, name="api-booking-session"),
+    path('add-booking/', views.addBookingSession, name="api-add-booking-session"),
+    path('delete-booking/<str:pk>/', views.deleteBookingSession, name="api-add-booking-session"),
+
+    path('add-rating/', views.addRating, name="api-add-rating"),
 ]

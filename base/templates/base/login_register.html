@@ -12,18 +12,18 @@
         </div>
       </div>
       <div class="layout__body">
-        <h2 class="auth__tagline">Find your study partner</h2>
+        <h2 class="auth__tagline">Find your TrainPal</h2>
 
         <form class="form" action="" method="POST">
           {% csrf_token %}
           <div class="form__group form__group">
-            <label for="room_name">Email</label>
-            <input id="username" name="email" type="email" placeholder="e.g. dennis_ivy@email.com />
+            <label for="room_name">Username</label>
+            <input id="username" name="username" type="username" placeholder="Uesrname" />
           </div>
           <div class=" form__group">
             <label for="password">Password</label>
             <input id="password" name="password" type="password"
-              placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" />
+              placeholder="Password" />
           </div>
 
           <button class="btn btn--main" type="submit">
@@ -57,7 +57,7 @@
         </div>
       </div>
       <div class="layout__body">
-        <h2 class="auth__tagline">Find your study partner</h2>
+        <h2 class="auth__tagline">Find your TrainPal</h2>
 
         <form class="form" action="" method="POST">
           {% csrf_token %}

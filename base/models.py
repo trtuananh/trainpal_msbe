@@ -135,6 +135,9 @@ class ChatRoom(models.Model):
     host = models.ForeignKey(User, models.SET_NULL, blank=True, null=True, related_name='host')
     users = models.ManyToManyField(User)
 
+    def __str__(self) -> str:
+        return f"{self.name}: {self.users.all()[0]}, {self.users.all()[1]}, ..."
+
 
 class Message(models.Model):
     sender = models.ForeignKey(User, models.SET_NULL, null=True)
@@ -147,7 +150,7 @@ class Message(models.Model):
         ordering = ['-created']
 
     def __str__(self) -> str:
-        return f"{self.sender} to {self.room}: {self.content}"
+        return f"@{self.sender}: {self.content}"
 
 # endregion
 
@@ -208,7 +211,8 @@ class BookingSession(models.Model):
 
 class Rating(models.Model):
     user = models.ForeignKey(User, models.CASCADE)
-    booking_session = models.ForeignKey(BookingSession, models.CASCADE)
+    course = models.ForeignKey(Course, models.SET_NULL, null=True)
+    booking_session = models.OneToOneField(BookingSession, models.CASCADE)
     rating = models.FloatField()
     comment = models.TextField(blank=True)
 

@@ -4,16 +4,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
-from .models import Message, User
-from .forms import UserForm, MyUserCreationForm
-
-# Create your views here.
-
-# rooms = [
-#     {'id': 1, 'name': 'Lets learn python!'},
-#     {'id': 2, 'name': 'Design with me'},
-#     {'id': 3, 'name': 'Frontend developers'},
-# ]
+from . import models
+from . import forms
 
 
 def loginPage(request):
@@ -22,15 +14,15 @@ def loginPage(request):
         return redirect('home')
 
     if request.method == 'POST':
-        email = request.POST.get('email').lower()
+        username = request.POST.get('username').lower()
         password = request.POST.get('password')
 
         try:
-            user = User.objects.get(email=email)
+            user = models.User.objects.get(username=username)
         except:
             messages.error(request, 'User does not exist')
 
-        user = authenticate(request, email=email, password=password)
+        user = authenticate(request, username=username, password=password)
 
         if user is not None:
             login(request, user)
@@ -48,10 +40,10 @@ def logoutUser(request):
 
 
 def registerPage(request):
-    form = MyUserCreationForm()
+    form = forms.MyUserCreationForm()
 
     if request.method == 'POST':
-        form = MyUserCreationForm(request.POST)
+        form = forms.MyUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
             user.username = user.username.lower()
@@ -64,37 +56,33 @@ def registerPage(request):
     return render(request, 'base/login_register.html', {'form': form})
 
 
+@login_required(login_url='login')
 def home(request):
+    user = request.user
     q = request.GET.get('q') if request.GET.get('q') != None else ''
 
-    rooms = Room.objects.filter(
-        Q(topic__name__icontains=q) |
-        Q(name__icontains=q) |
-        Q(description__icontains=q)
-    )
+    rooms = user.chatroom_set.filter(name__icontains=q)
 
-    topics = Topic.objects.all()[0:5]
+    topics = models.Sport.objects.all()[0:5]
     room_count = rooms.count()
-    room_messages = Message.objects.filter(
-        Q(room__topic__name__icontains=q))[0:3]
+    room_messages = models.Message.objects.all()[0:3]
 
-    context = {'rooms': rooms, 'topics': topics,
-               'room_count': room_count, 'room_messages': room_messages}
+    context = {'rooms': rooms, 'room_count': room_count, 'room_messages': room_messages, 'topics': topics}
     return render(request, 'base/home.html', context)
 
 
 def room(request, pk):
-    room = Room.objects.get(id=pk)
+    room = models.ChatRoom.objects.get(id=pk)
     room_messages = room.message_set.all()
-    participants = room.participants.all()
+    participants = room.users.all()
 
     if request.method == 'POST':
-        message = Message.objects.create(
-            user=request.user,
+        message = models.Message.objects.create(
+            sender=request.user,
             room=room,
-            body=request.POST.get('body')
+            content=request.POST.get('body')
         )
-        room.participants.add(request.user)
+        room.users.add(request.user)
         return redirect('room', pk=room.id)
 
     context = {'room': room, 'room_messages': room_messages,
@@ -103,59 +91,75 @@ def room(request, pk):
 
 
 def userProfile(request, pk):
-    user = User.objects.get(id=pk)
-    rooms = user.room_set.all()
+    user = models.User.objects.get(id=pk)
+    form = forms.UserForm(instance=user)
+    sports = user.sports.all()
+    rooms = user.chatroom_set.all()
     room_messages = user.message_set.all()
-    topics = Topic.objects.all()
-    context = {'user': user, 'rooms': rooms,
-               'room_messages': room_messages, 'topics': topics}
+    context = {'user': user, 'rooms': rooms, 'topics': sports,
+               'room_messages': room_messages, 'form': form}
     return render(request, 'base/profile.html', context)
 
 
 @login_required(login_url='login')
-def createRoom(request):
-    form = RoomForm()
-    topics = Topic.objects.all()
+def updateUser(request):
+    user = request.user
+    form = forms.UserForm(instance=user)
+
     if request.method == 'POST':
-        topic_name = request.POST.get('topic')
-        topic, created = Topic.objects.get_or_create(name=topic_name)
+        form = forms.UserForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('user-profile', pk=user.id)
 
-        Room.objects.create(
-            host=request.user,
-            topic=topic,
-            name=request.POST.get('name'),
-            description=request.POST.get('description'),
-        )
-        return redirect('home')
+    return render(request, 'base/update-user.html', {'form': form})
 
-    context = {'form': form, 'topics': topics}
+
+@login_required(login_url='login')
+def createRoom(request):
+    form = forms.ChatRoomForm()
+    if request.method == 'POST':
+
+        user = request.user
+        form = forms.ChatRoomForm(request.POST)
+        if form.is_valid():
+            chatroom = form.save(commit=False)
+            chatroom.host = user
+            chatroom.save()
+            chatroom.users.set([user.id] + [int(request.POST.get("users"))])
+            return redirect('home')
+        else:
+            messages.error(request, 'Invalid Form')
+
+    context = {'form': form}
     return render(request, 'base/room_form.html', context)
 
 
 @login_required(login_url='login')
 def updateRoom(request, pk):
-    room = Room.objects.get(id=pk)
-    form = RoomForm(instance=room)
-    topics = Topic.objects.all()
-    if request.user != room.host:
+    room = models.ChatRoom.objects.get(id=pk)
+    form = forms.ChatRoomForm(instance=room)
+    user = request.user
+    if user != room.host:
         return HttpResponse('Your are not allowed here!!')
 
     if request.method == 'POST':
-        topic_name = request.POST.get('topic')
-        topic, created = Topic.objects.get_or_create(name=topic_name)
-        room.name = request.POST.get('name')
-        room.topic = topic
-        room.description = request.POST.get('description')
-        room.save()
-        return redirect('home')
+        if form.is_valid():
+            chatroom = form.save(commit=False)
+            chatroom.host = user
+            chatroom.save()
+            chatroom.users.set([user.id] + [int(request.POST.get("users"))])
+            return redirect('home')
+        else:
+            messages.error(request, 'Invalid Form')
 
-    context = {'form': form, 'topics': topics, 'room': room}
+    context = {'form': form, 'room': room}
     return render(request, 'base/room_form.html', context)
 
 
 @login_required(login_url='login')
 def deleteRoom(request, pk):
-    room = Room.objects.get(id=pk)
+    room = models.ChatRoom.objects.get(id=pk)
 
     if request.user != room.host:
         return HttpResponse('Your are not allowed here!!')
@@ -168,9 +172,9 @@ def deleteRoom(request, pk):
 
 @login_required(login_url='login')
 def deleteMessage(request, pk):
-    message = Message.objects.get(id=pk)
+    message = models.Message.objects.get(id=pk)
 
-    if request.user != message.user:
+    if request.user != message.sender:
         return HttpResponse('Your are not allowed here!!')
 
     if request.method == 'POST':
@@ -179,26 +183,12 @@ def deleteMessage(request, pk):
     return render(request, 'base/delete.html', {'obj': message})
 
 
-@login_required(login_url='login')
-def updateUser(request):
-    user = request.user
-    form = UserForm(instance=user)
-
-    if request.method == 'POST':
-        form = UserForm(request.POST, request.FILES, instance=user)
-        if form.is_valid():
-            form.save()
-            return redirect('user-profile', pk=user.id)
-
-    return render(request, 'base/update-user.html', {'form': form})
-
-
 def topicsPage(request):
-    q = request.GET.get('q') if request.GET.get('q') != None else ''
-    topics = Topic.objects.filter(name__icontains=q)
+    # q = request.GET.get('q') if request.GET.get('q') != None else ''
+    topics = models.Sport.objects.all()
     return render(request, 'base/topics.html', {'topics': topics})
 
 
 def activityPage(request):
-    room_messages = Message.objects.all()
+    room_messages = models.Message.objects.all()
     return render(request, 'base/activity.html', {'room_messages': room_messages})

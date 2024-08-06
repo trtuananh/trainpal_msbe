@@ -50,6 +50,7 @@ class PaymentHistoryForm(ModelForm):
 class ChatRoomForm(ModelForm):
     class Meta:
         model = models.ChatRoom
+        exclude = ['host']
         fields = '__all__'
 
 

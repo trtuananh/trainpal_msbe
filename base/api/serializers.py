@@ -66,3 +66,9 @@ class BookingSessionSerializer(ModelSerializer):
     class Meta:
         model = models.BookingSession
         fields = '__all__'
+
+
+class RatingSerializer(ModelSerializer):
+    class Meta:
+        model = models.Rating
+        fields = '__all__'

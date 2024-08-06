@@ -400,29 +400,9 @@ def addTrainingSession(request):
             training_session = form.save(commit=False)
 
             try:
-                update_session = course.trainingsession_set.get(start__lt=training_session.start, 
-                                                                end__gt=training_session.start)
-                print("start < add_start < end < add_end")
-                if update_session.state != "AV":
-                    return Response({"success": False, "message": "Schedule conflict"})
-                update_session.end = training_session.start
-                update_session.save()
-            except: 
-                pass
-
-            try:
-                update_session = course.trainingsession_set.get(start__lt=training_session.end, 
-                                                                end__gt=training_session.end)
-                if update_session.state != "AV":
-                    return Response({"success": False, "message": "Schedule conflict"})
-                update_session.start = training_session.end
-                update_session.save()
-            except: 
-                pass
-
-            try:
                 update_sessions = course.trainingsession_set.filter(start__gte=training_session.start, 
                                                                 end__lte=training_session.end)
+                print("add_start <= start < end <= add_end:", len(update_sessions))
                 for update_session in update_sessions:
                     if update_session.state != "AV":
                         return Response({"success": False, "message": "Schedule conflict"})
@@ -433,17 +413,40 @@ def addTrainingSession(request):
             try:
                 update_session = course.trainingsession_set.get(start__lt=training_session.start, 
                                                                 end__gt=training_session.end)
+                print("start < add_start < add_end < end")
                 if update_session.state != "AV":
                     return Response({"success": False, "message": "Schedule conflict"})
-                update_session.end = training_session.start
-                update_session.save()
-
                 split_session = forms.TrainingSessionForm(request.data).save(commit=False)
                 split_session.start = training_session.end
                 split_session.end = update_session.end
                 split_session.save()
-            except Exception as e: 
-                print(e)
+
+                update_session.end = training_session.start
+                update_session.save()
+            except: 
+                pass
+
+            try:
+                update_session = course.trainingsession_set.get(start__lt=training_session.start, 
+                                                                end__gt=training_session.start)
+                print("start < add_start < end <= add_end")
+                if update_session.state != "AV":
+                    return Response({"success": False, "message": "Schedule conflict"})
+                update_session.end = training_session.start
+                update_session.save()
+            except: 
+                pass
+
+            try:
+                update_session = course.trainingsession_set.get(start__lt=training_session.end, 
+                                                                end__gt=training_session.end)
+                print("add_start <= start < add_end < end")
+                if update_session.state != "AV":
+                    return Response({"success": False, "message": "Schedule conflict"})
+                update_session.start = training_session.end
+                update_session.save()
+            except: 
+                pass
 
             training_session.save()
             return Response({"success": True})
@@ -474,13 +477,15 @@ def deleteTrainingSession(request, pk):
 
 @api_view(['GET'])
 def getBookingSessions(request):
-    serializer = srl.BookingSessionSerializer(models.BookingSession.objects.all(), many=True)
+    user = request.user
+    serializer = srl.BookingSessionSerializer(user.bookingsession_set.all(), many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
 def getBookingSession(request, pk):
-    serializer = srl.BookingSessionSerializer(models.BookingSession.objects.get(id=pk), many=False)
+    user = request.user
+    serializer = srl.BookingSessionSerializer(user.bookingsession_set.get(id=pk), many=False)
     return Response(serializer.data)
 
 
@@ -494,6 +499,11 @@ def addBookingSession(request):
 
     form = forms.BookingSessionForm(request.data)
     if form.is_valid():
+        training_session = models.TrainingSession.objects.get(id=request.data["training_session"])
+        ntrainees = training_session.bookingsession_set.count()
+        if ntrainees >= training_session.course.max_trainee:
+            return Response({"success": False, "message": "Training Session is full"})
+
         booking_session = form.save(commit=False)
         booking_session.user = user
         booking_session.save()
@@ -511,7 +521,11 @@ def deleteBookingSession(request, pk):
         return Response({"success": True})
     except Exception as e:
         return Response({"success": False, "message": str(e)})
+ 
+# endregion
 
+
+# region > Rating
 
 @login_required(login_url='api-login')
 @api_view(['POST'])
@@ -529,4 +543,11 @@ def addRating(request):
     else:
         return Response({"success": False, "message": "invalid form"})
     
+
+@api_view(['GET'])
+def getRatings(request, course_pk):
+    rating = models.Course.objects.get(id=course_pk).rating_set
+    serializer = srl.RatingSerializer(rating, many=True)
+    return Response(serializer.data)
+
 # endregion
