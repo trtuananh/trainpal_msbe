@@ -402,6 +402,7 @@ def addTrainingSession(request):
             try:
                 update_session = course.trainingsession_set.get(start__lt=training_session.start, 
                                                                 end__gt=training_session.start)
+                print("start < add_start < end < add_end")
                 if update_session.state != "AV":
                     return Response({"success": False, "message": "Schedule conflict"})
                 update_session.end = training_session.start
