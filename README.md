@@ -2,7 +2,7 @@
 
 --> Clone the repository using the command below :
 ```bash
-https://github.com/trtuananh/trainpal_dj.git
+git clone https://github.com/trtuananh/trainpal_dj.git
 
 ```
 
