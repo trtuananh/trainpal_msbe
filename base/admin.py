@@ -5,13 +5,9 @@ from django.contrib import admin
 from . import models
 
 
-admin.site.register(models.Sport)
 admin.site.register(models.User)
 admin.site.register(models.Location)
-admin.site.register(models.PaymentMethod)
-admin.site.register(models.CardMethod)
-admin.site.register(models.EBankingMethod)
-admin.site.register(models.PaymentHistory)
+admin.site.register(models.Payment)
 admin.site.register(models.ChatRoom)
 admin.site.register(models.Message)
 admin.site.register(models.Course)

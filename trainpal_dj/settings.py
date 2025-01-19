@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -41,19 +42,36 @@ INSTALLED_APPS = [
     'base.apps.BaseConfig',
 
     'rest_framework',
-    # "corsheaders",
+    "corsheaders",
+
+    'channels',
+    # 'chat', 
 ]
+
+# Thêm cấu hình ASGI và Channel layers
+ASGI_APPLICATION = 'trainpal_dj.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        # 'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+        # 'CONFIG': {
+        #     "hosts": [('127.0.0.1', 6379)],
+        # },
+    },
+}
 
 AUTH_USER_MODEL = 'base.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
 
-    # "corsheaders.middleware.CorsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
 
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
+    'trainpal_dj.middleware.CustomCsrfMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -75,6 +93,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries': {  # Thêm phần này
+                'staticfiles': 'django.templatetags.static',
+            },
         },
     },
 ]
@@ -97,15 +118,21 @@ DATABASES = {
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    #     'OPTIONS': {
+    #         # Bỏ 'email' khỏi danh sách các trường cần kiểm tra
+    #         'user_attributes': ('username', 'first_name', 'last_name'),
+    #         # Hoặc có thể tăng độ tương đồng cho phép (mặc định là 0.7)
+    #         'max_similarity': 0.9,
+    #     }
+    # },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    # },
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
@@ -145,5 +172,27 @@ MEDIA_ROOT = BASE_DIR / 'static/images'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+ALLOWED_HOSTS = ['*']  # Cho development
 
-# CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = True
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        # 'rest_framework.authentication.SessionAuthentication',  # Cho web browser
+        'rest_framework_simplejwt.authentication.JWTAuthentication',  # Cho API clients
+    ],
+}
+
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=36500),  # Set to 100 years
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'UPDATE_LAST_LOGIN': True,
+    
+    # Cho phép refresh token khi access token chưa hết hạn
+    'ALGORITHM': 'HS256',
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+}

@@ -22,28 +22,9 @@ class LocationForm(ModelForm):
         exclude = ['user']
 
 
-class PaymentMethodForm(ModelForm):
+class PaymentForm(ModelForm):
     class Meta:
-        model = models.PaymentMethod
-        # fields = ["payment_type", "info"]
-        exclude = ['user']
-
-
-class CardMethodForm(ModelForm):
-    class Meta:
-        model = models.CardMethod
-        exclude = ['payment_method']
-
-
-class EBankingMethodForm(ModelForm):
-    class Meta:
-        model = models.EBankingMethod
-        exclude = ['payment_method']
-
-
-class PaymentHistoryForm(ModelForm):
-    class Meta:
-        model = models.PaymentHistory
+        model = models.Payment
         exclude = ['sender', 'receiver']
 
 
