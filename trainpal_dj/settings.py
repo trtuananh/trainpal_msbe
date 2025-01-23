@@ -26,8 +26,8 @@ SECRET_KEY = 'django-insecure-3#av2c6nptlbbb6^muqkchu&fe3wv&n$t2+g$v!ir-f5%doocb
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-# ALLOWED_HOSTS = ['trainpal.ddns.net']
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['trainpal.ddns.net']
+# ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -53,11 +53,11 @@ ASGI_APPLICATION = 'trainpal_dj.asgi.application'
 
 CHANNEL_LAYERS = {
     'default': {
-        # 'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'BACKEND': 'channels.layers.InMemoryChannelLayer',
-        # 'CONFIG': {
-        #     "hosts": [('127.0.0.1', 6379)],
-        # },
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        # 'BACKEND': 'channels.layers.InMemoryChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
     },
 }
 
