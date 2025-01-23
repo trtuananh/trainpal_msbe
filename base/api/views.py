@@ -250,7 +250,6 @@ def updateProfile(request):
 
 # region > Location
 
-@login_required(login_url='api-login')
 @api_view(['GET'])
 def getLocations(request):
     user = request.user
@@ -258,7 +257,6 @@ def getLocations(request):
     return Response(serializer.data)
 
 
-@login_required(login_url='api-login')
 @api_view(['POST'])
 def addLocation(request):
     if request.method != 'POST':
@@ -276,7 +274,6 @@ def addLocation(request):
         return Response({"success": False, "message": get_form_errors(form)}, status=400)
     
 
-@login_required(login_url='api-login')
 @api_view(['GET'])
 def deleteLocation(request, pk):
     user = request.user
@@ -1152,7 +1149,6 @@ def getTrainingSession(request, pk):
     return Response(serializer.data)
 
 
-@login_required(login_url='api-login')
 @api_view(['POST'])
 def addTrainingSession(request):
     if request.method != 'POST':
@@ -1221,7 +1217,6 @@ def addTrainingSession(request):
         return Response({"success": False, "message": get_form_errors(form)}, status=400)
 
 
-@login_required(login_url='api-login')
 @api_view(['GET'])
 def deleteTrainingSession(request, pk):
     user = request.user
@@ -1328,7 +1323,6 @@ def getBookingSession(request, pk):
     return Response(serializer.data)
 
 
-@login_required(login_url='api-login')
 @api_view(['POST'])
 def addBookingSession(request):
     if request.method != 'POST':
@@ -1351,7 +1345,6 @@ def addBookingSession(request):
         return Response({"success": False, "message": get_form_errors(form)}, status=400)
 
 
-@login_required(login_url='api-login')
 @api_view(['GET'])
 def deleteBookingSession(request, pk):
     user = request.user
@@ -1366,7 +1359,6 @@ def deleteBookingSession(request, pk):
 
 # region > Rating
 
-@login_required(login_url='api-login')
 @api_view(['POST'])
 def addRating(request):
     if request.method != 'POST':
