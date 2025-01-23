@@ -127,9 +127,14 @@ class TrainingSessionSerializer(ModelSerializer):
     course = MinimalCourseSerializer(read_only=True)
     n_members = SerializerMethodField()
     is_booked = SerializerMethodField()
+    price = SerializerMethodField()
 
     def get_n_members(self, obj):
         return obj.booking_sessions.count()
+
+    def get_price(self, obj):
+        price = sum(booking_session.price for booking_session in obj.booking_sessions.all())
+        return price
 
     def get_is_booked(self, obj):
         # Kiểm tra nếu có bất kỳ booking_session nào của người dùng trỏ đến training_session
