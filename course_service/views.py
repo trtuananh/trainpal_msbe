@@ -518,3 +518,24 @@ def get_ratings(request, course_pk):
     ratings = models.Course.objects.get(id=course_pk).ratings
     serializer = serializers.RatingSerializer(ratings, many=True)
     return Response(serializer.data)
+
+@api_view(['GET'])
+def get_booking_sessions_by_payment(request, payment_id):
+    booking_sessions = models.BookingSession.objects.filter(payment_id=payment_id)
+    serializer = serializers.BookingSessionSerializer(booking_sessions, many=True, context={'request': request})
+    return Response(serializer.data)
+
+@api_view(['POST'])
+def update_booking_session(request, pk):
+    user = request.user
+    data = request.data
+    try:
+        booking_session = models.BookingSession.objects.get(id=pk, user_id=user.id)
+        if 'payment_id' in data:
+            booking_session.payment_id = data['payment_id']
+        if 'training_session' in data:
+            booking_session.training_session_id = data['training_session']
+        booking_session.save()
+        return Response({"success": True})
+    except Exception as e:
+        return Response({"success": False, "message": str(e)}, status=400)

@@ -19,4 +19,6 @@ urlpatterns = [
     path('add-booking/', views.add_booking_session, name="add_booking_session"),
     path('delete-booking/<str:pk>/', views.delete_booking_session, name="delete_booking_session"),
     path('add-rating/', views.add_rating, name="add_rating"),
+    path('booking-by-payment/<str:payment_id>/', views.get_booking_sessions_by_payment, name="booking_by_payment"),
+    path('update-booking/<str:pk>/', views.update_booking_session, name="update_booking_session"),
 ]
