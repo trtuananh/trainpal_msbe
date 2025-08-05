@@ -12,8 +12,8 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'trainpal_dj.settings')
 from django.core.asgi import get_asgi_application
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.security.websocket import AllowedHostsOriginValidator
-from base.routing import websocket_urlpatterns
-from base.middleware import WebSocketAuthMiddleware
+from message_service.routing import websocket_urlpatterns
+from .middleware import WebSocketAuthMiddleware
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'trainpal_dj.settings')
 
