@@ -113,6 +113,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+ASGI_MIDDLEWARE = [
+    'trainpal_dj.middleware.WebSocketAuthMiddleware',
+]
+
 ROOT_URLCONF = 'trainpal_dj.urls'
 
 TEMPLATES = [
