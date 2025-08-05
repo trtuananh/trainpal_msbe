@@ -24,10 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-3#av2c6nptlbbb6^muqkchu&fe3wv&n$t2+g$v!ir-f5%doocb'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['trainpal.ddns.net']
-# ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['trainpal.ddns.net', '127.0.0.1', 'localhost']
 
 # Application definition
 
@@ -38,14 +37,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    'base.apps.BaseConfig',
-
+    'user_service.apps.UserServiceConfig',
+    'course_service.apps.CourseServiceConfig',
+    'payment_service.apps.PaymentServiceConfig',
+    'message_service.apps.MessageServiceConfig',
     'rest_framework',
-    "corsheaders",
-
+    'corsheaders',
     'channels',
-    # 'chat', 
 ]
 
 # Thêm cấu hình ASGI và Channel layers
@@ -61,7 +59,45 @@ CHANNEL_LAYERS = {
     },
 }
 
-AUTH_USER_MODEL = 'base.User'
+DATABASES = {
+    'default': {},  # Empty default database
+    'user_service': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'user_service_db',
+        'USER': 'postgres',
+        'PASSWORD': 'your_password',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    },
+    'course_service': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'course_service_db',
+        'USER': 'postgres',
+        'PASSWORD': 'your_password',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    },
+    'payment_service': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'payment_service_db',
+        'USER': 'postgres',
+        'PASSWORD': 'your_password',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    },
+    'message_service': {
+        'ENGINE': 'djongo',
+        'NAME': 'message_service_db',
+        'CLIENT': {
+            'host': 'localhost',
+            'port': 27017,
+        },
+    },
+}
+
+DATABASE_ROUTERS = ['trainpal_dj.routers.ServiceRouter']
+
+AUTH_USER_MODEL = 'user_service.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -172,8 +208,6 @@ MEDIA_ROOT = BASE_DIR / 'static/images'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# ALLOWED_HOSTS = ['*']  # Cho development
-
 CORS_ALLOW_ALL_ORIGINS = True
 
 
@@ -198,9 +232,9 @@ SIMPLE_JWT = {
 }
 
 # Thêm cấu hình SECURE
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-SECURE_BROWSER_XSS_FILTER = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# SECURE_SSL_REDIRECT = True
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
+# SECURE_BROWSER_XSS_FILTER = True
+# SECURE_CONTENT_TYPE_NOSNIFF = True
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

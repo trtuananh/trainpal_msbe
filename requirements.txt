@@ -21,7 +21,7 @@ idna==3.10
 incremental==24.7.2
 msgpack==1.1.0
 numpy==2.2.1
-Pillow==8.3.2
+Pillow==10.4
 pyasn1==0.6.1
 pyasn1_modules==0.4.1
 pycodestyle==2.7.0
