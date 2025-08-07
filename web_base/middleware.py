@@ -35,7 +35,7 @@ class WebSocketAuthMiddleware(BaseMiddleware):
 
     @database_sync_to_async
     def get_user(self, user_id):
-        from base.models import User
+        from web_base.models import User
         from django.contrib.auth.models import AnonymousUser
         try:
             return User.objects.get(id=user_id)

@@ -59,44 +59,6 @@ CHANNEL_LAYERS = {
     },
 }
 
-DATABASES = {
-    'default': {},  # Empty default database
-    'user_service': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'user_service_db',
-        'USER': 'postgres',
-        'PASSWORD': 'your_password',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    },
-    'course_service': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'course_service_db',
-        'USER': 'postgres',
-        'PASSWORD': 'your_password',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    },
-    'payment_service': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'payment_service_db',
-        'USER': 'postgres',
-        'PASSWORD': 'your_password',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    },
-    'message_service': {
-        'ENGINE': 'djongo',
-        'NAME': 'message_service_db',
-        'CLIENT': {
-            'host': 'localhost',
-            'port': 27017,
-        },
-    },
-}
-
-DATABASE_ROUTERS = ['trainpal_dj.routers.ServiceRouter']
-
 AUTH_USER_MODEL = 'user_service.User'
 
 MIDDLEWARE = [
@@ -150,8 +112,42 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    },  # Empty default database
+    'user_service': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'user_service_db',
+        'USER': 'postgres',
+        'PASSWORD': 'your_password',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    },
+    'course_service': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'course_service_db',
+        'USER': 'postgres',
+        'PASSWORD': 'your_password',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    },
+    'payment_service': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'payment_service_db',
+        'USER': 'postgres',
+        'PASSWORD': 'your_password',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    },
+    'message_service': {
+        'ENGINE': 'djongo',
+        'NAME': 'message_service_db',
+        'CLIENT': {
+            'host': 'localhost',
+            'port': 27017,
+        },
+    },
 }
+
+DATABASE_ROUTERS = ['trainpal_dj.routers.ServiceRouter']
 
 
 # Password validation

@@ -33,7 +33,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             )
 
     async def receive(self, text_data):
-        from base.api.serializers import UserListSerializer
+        from web_base.api.serializers import UserListSerializer
         from channels.db import database_sync_to_async
 
         data = json.loads(text_data)
@@ -79,7 +79,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         }))
 
     async def save_message(self, sender, room, content, date):
-        from base.models import Message
+        from web_base.models import Message
         from channels.db import database_sync_to_async
         
         @database_sync_to_async

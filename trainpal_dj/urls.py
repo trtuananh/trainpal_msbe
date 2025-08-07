@@ -20,6 +20,7 @@ from django.conf.urls.static import static
 
 
 urlpatterns = [
+    path('', include('web_base.urls')),
     path('api/user/', include('user_service.urls', namespace='user_service')),
     path('api/course/', include('course_service.urls', namespace='course_service')),
     path('api/payment/', include('payment_service.urls', namespace='payment_service')),

@@ -8,7 +8,7 @@ class ServiceRouter:
             return 'payment_service'
         elif model._meta.app_label == 'message_service':
             return 'message_service'
-        return None
+        return "default"
 
     def db_for_write(self, model, **hints):
         if model._meta.app_label == 'user_service':
@@ -19,7 +19,7 @@ class ServiceRouter:
             return 'payment_service'
         elif model._meta.app_label == 'message_service':
             return 'message_service'
-        return None
+        return "default"
 
     def allow_relation(self, obj1, obj2, **hints):
         return obj1._meta.app_label == obj2._meta.app_label
@@ -33,4 +33,4 @@ class ServiceRouter:
             return db == 'payment_service'
         elif app_label == 'message_service':
             return db == 'message_service'
-        return None
+        return db == 'default'
