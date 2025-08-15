@@ -1,9 +1,12 @@
 # TrainPal Backend
 
 ## Introduction
-TrainPal is a Django-based microservice backend for a mobile application designed to connect fitness trainers and trainees. The backend supports user authentication, course management, online payments via MoMo, and real-time messaging between users. It uses multiple databases (PostgreSQL for user, course, and payment services; MongoDB for messaging; and Redis for WebSocket communication) to ensure modularity and scalability.
 
-This project provides a robust API for managing fitness training sessions, enabling trainers to create courses and schedules, trainees to book sessions, and both to communicate seamlessly. The codebase is organized into four main services: `user_service`, `course_service`, `payment_service`, and `message_service`.
+### About TrainPal
+TrainPal is a mobile application designed to connect fitness enthusiasts, enabling trainers and trainees to collaborate seamlessly in their fitness journeys. Whether you're a professional trainer offering personalized workout sessions or a trainee seeking to achieve your fitness goals, TrainPal provides a platform to discover, schedule, and manage training sessions with ease. Key features include user registration, course creation and booking, online payments via MoMo, and real-time messaging, all accessible through an intuitive mobile interface.
+
+### TrainPal Backend
+The backend of TrainPal is built using Django, a robust Python web framework, structured in a microservices-like architecture within a single Django project for modularity and scalability. It is divided into four main services: `user_service` for authentication and profile management, `course_service` for course and session management, `payment_service` for handling transactions, and `message_service` for real-time chat. The backend leverages multiple databases—PostgreSQL for user, course, and payment data; MongoDB for messaging; and Redis for WebSocket communication—to ensure efficient data handling and isolation.
 
 ## Installation Guide
 This section guides you through setting up the TrainPal backend environment using Conda and running the server.
@@ -19,14 +22,14 @@ This section guides you through setting up the TrainPal backend environment usin
 ### Setup Instructions
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/trtuananh/trainpal_msbe.git
-   cd trainpal_msbe
+   git clone https://github.com/your-repo/trainpal_dj.git
+   cd trainpal_dj
    ```
 
 2. **Create a Conda Environment**:
    ```bash
-   conda create -n trainpal_dj python=3.8
-   conda activate trainpal_dj
+   conda create -n trainpal_env python=3.8
+   conda activate trainpal_env
    ```
 
 3. **Install Dependencies**:
@@ -34,7 +37,7 @@ This section guides you through setting up the TrainPal backend environment usin
    ```bash
    pip install -r requirements.txt
    ```
-
+   
 4. **Configure Databases**:
    - **PostgreSQL**:
      - Install PostgreSQL and create databases for `user_service`, `course_service`, and `payment_service`:
@@ -96,7 +99,7 @@ Users can register as either a **trainer** or a **trainee** and log in to access
 *Placeholder for Screenshot: [Insert image of registration/login screen here]*
 
 ### Manage User Profile
-Users can view and update their profiles, including personal details (e.g., name, email, phone, avatar, bio). Trainers can specify their expertise, while trainees can manage their preferences.
+Users can view and update their profiles, including personal details such as name, email, phone, avatar, and bio. Trainers can specify their expertise, while trainees can manage their preferences.
 
 - **Endpoints**:
   - `GET /api/user/profile/<pk>/`: Retrieve user profile.
@@ -105,7 +108,7 @@ Users can view and update their profiles, including personal details (e.g., name
 *Placeholder for Screenshot: [Insert image of user profile screen here]*
 
 ### For Trainers
-Trainers have access to powerful tools to manage their fitness offerings:
+Trainers have access to tools to manage their fitness offerings:
 - **Create and Manage Courses**: Trainers can create courses (e.g., yoga, boxing) with details like title, description, price, and location.
   - `POST /api/course/create-course/`: Create a new course.
   - `POST /api/course/update-course/`: Update an existing course.
@@ -120,9 +123,9 @@ Trainers have access to powerful tools to manage their fitness offerings:
 *Placeholder for Screenshot: [Insert image of trainer dashboard showing course creation or session scheduling here]*
 
 ### For Trainees
-Trainees can browse and book training sessions, make payments, and communicate with trainers:
-- **Browse and Book Courses**: Trainees can search for courses by sport, location, or trainer and book sessions.
-  - `GET /api/course/courses/`: List available courses.
+Trainees can browse, book, pay for, and communicate about training sessions:
+- **Browse and Book Courses**: Trainees can search for courses using filters such as sport type (e.g., yoga, boxing), trainer, location, price, or level (beginner, intermediate, advanced). They can also find courses near their location using a map-based search, leveraging geolocation to display courses within a specified radius.
+  - `GET /api/course/courses/`: List available courses with optional query parameters (e.g., `?sport=YG` for yoga, `?latlng=10.7769,106.7009&radius=5000` for courses within 5km).
   - `POST /api/course/add-booking/`: Book a training session.
 - **Make Payments**: Trainees can pay for sessions via MoMo or offline methods.
   - `POST /api/payment/create-payment/`: Create a payment.
@@ -132,7 +135,11 @@ Trainees can browse and book training sessions, make payments, and communicate w
   - `GET /api/message/messages/<room_id>/`: Retrieve messages.
   - WebSocket: `ws://localhost:8000/ws/chat/<user_id>/` for real-time messaging.
 
-*Placeholder for Screenshot: [Insert image of trainee dashboard showing course browsing or chat interface here]*
+*Placeholder for Screenshot: [Insert image of trainee dashboard showing course browsing with filters or map-based search here]*
+
+## Links
+- **Frontend Repository**: Explore the TrainPal mobile frontend code at [https://github.com/your-repo/trainpal_frontend](https://github.com/your-repo/trainpal_frontend).
+- **Video Demo**: Watch a demo of the TrainPal application in action at [https://www.youtube.com/your-video-demo](https://www.youtube.com/your-video-demo).
 
 ## Contributing
 Contributions are welcome! Please fork the repository, create a new branch, and submit a pull request with your changes. Ensure that your code adheres to the project's coding standards and includes tests.
