@@ -5,9 +5,7 @@
 ### About TrainPal
 TrainPal is a mobile application designed to connect fitness enthusiasts, enabling trainers and trainees to collaborate seamlessly in their fitness journeys. Whether you're a professional trainer offering personalized workout sessions or a trainee seeking to achieve your fitness goals, TrainPal provides a platform to discover, schedule, and manage training sessions with ease. Key features include user registration, course creation and booking, online payments via MoMo, and real-time messaging, all accessible through an intuitive mobile interface.
 
-![TrainPal Logo](demo/logo.png)
-
-<!-- <img src="demo/logo.png" alt="Mô tả hình ảnh" width="300" height="300" /> -->
+<img src="demo/logo.png" alt="Mô tả hình ảnh" width="300" height="300" />
 
 ### TrainPal Backend
 The backend of TrainPal is built using Django, a robust Python web framework, structured in a microservices-like architecture within a single Django project for modularity and scalability. It is divided into four main services: `user_service` for authentication and profile management, `course_service` for course and session management, `payment_service` for handling transactions, and `message_service` for real-time chat. The backend leverages multiple databases—PostgreSQL for user, course, and payment data; MongoDB for messaging; and Redis for WebSocket communication—to ensure efficient data handling and isolation.
