@@ -5,6 +5,10 @@
 ### About TrainPal
 TrainPal is a mobile application designed to connect fitness enthusiasts, enabling trainers and trainees to collaborate seamlessly in their fitness journeys. Whether you're a professional trainer offering personalized workout sessions or a trainee seeking to achieve your fitness goals, TrainPal provides a platform to discover, schedule, and manage training sessions with ease. Key features include user registration, course creation and booking, online payments via MoMo, and real-time messaging, all accessible through an intuitive mobile interface.
 
+![TrainPal Logo](demo/logo.png)
+
+<!-- <img src="demo/logo.png" alt="Mô tả hình ảnh" width="300" height="300" /> -->
+
 ### TrainPal Backend
 The backend of TrainPal is built using Django, a robust Python web framework, structured in a microservices-like architecture within a single Django project for modularity and scalability. It is divided into four main services: `user_service` for authentication and profile management, `course_service` for course and session management, `payment_service` for handling transactions, and `message_service` for real-time chat. The backend leverages multiple databases—PostgreSQL for user, course, and payment data; MongoDB for messaging; and Redis for WebSocket communication—to ensure efficient data handling and isolation.
 
@@ -37,7 +41,7 @@ This section guides you through setting up the TrainPal backend environment usin
    ```bash
    pip install -r requirements.txt
    ```
-   
+
 4. **Configure Databases**:
    - **PostgreSQL**:
      - Install PostgreSQL and create databases for `user_service`, `course_service`, and `payment_service`:
@@ -95,8 +99,17 @@ Users can register as either a **trainer** or a **trainee** and log in to access
   - `POST /api/user/register/`: Register a new user.
   - `POST /api/user/login/`: Log in and receive JWT tokens.
   - `POST /api/user/token-refresh/`: Refresh access tokens.
+  - `POST /api/user/logout/`: Log out.
 
-*Placeholder for Screenshot: [Insert image of registration/login screen here]*
+- **Demo**:
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+  <img src="demo/user//first_screen.png" alt="Màn hình ứng dụng 1" style="width: 200px;" />
+  <img src="demo/user/login.png" alt="Màn hình ứng dụng 2" style="width: 200px;" />
+  <img src="demo/user/register_trainee.png" alt="Màn hình ứng dụng 3" style="width: 200px;" />
+  <img src="demo/user/register_trainer.png" alt="Màn hình ứng dụng 4" style="width: 200px;" />
+  <img src="demo/user/register_success.png" alt="Register Success" style="width: 200px;" />
+  <img src="demo/user/logout.png" alt="Register Success" style="width: 200px;" />
+</div>
 
 ### Manage User Profile
 Users can view and update their profiles, including personal details such as name, email, phone, avatar, and bio. Trainers can specify their expertise, while trainees can manage their preferences.
@@ -105,14 +118,32 @@ Users can view and update their profiles, including personal details such as nam
   - `GET /api/user/profile/<pk>/`: Retrieve user profile.
   - `POST /api/user/update-profile/`: Update user profile.
 
-*Placeholder for Screenshot: [Insert image of user profile screen here]*
+- **Demo**:
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+  <img src="demo/user/user.png" alt="Màn hình ứng dụng 1" style="width: 200px;" />
+  <img src="demo/user/user_profile.png" alt="Màn hình ứng dụng 2" style="width: 200px;" />
+  <img src="demo/user/edit_profile.png" alt="Màn hình ứng dụng 3" style="width: 200px;" />
+  <img src="demo/user/edit_success.png" alt="Màn hình ứng dụng 4" style="width: 200px;" />
+</div>
 
 ### For Trainers
 Trainers have access to tools to manage their fitness offerings:
-- **Create and Manage Courses**: Trainers can create courses (e.g., yoga, boxing) with details like title, description, price, and location.
+
+#### Create and Manage Courses
+Trainers can create courses (e.g., yoga, boxing) with details like title, description, price, and location.
+- **Endpoints**: 
   - `POST /api/course/create-course/`: Create a new course.
   - `POST /api/course/update-course/`: Update an existing course.
   - `GET /api/course/delete-course/<pk>/`: Delete a course.
+
+- **Demo**:
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+  <img src="demo/edit_course/my_course.png" alt="Màn hình ứng dụng 1" style="width: 200px;" />
+  <img src="demo/edit_course/add_course.png" alt="Màn hình ứng dụng 2" style="width: 200px;" />
+  <img src="demo/edit_course/search_location.png" alt="Màn hình ứng dụng 3" style="width: 200px;" />
+  <img src="demo/edit_course/pick_location.png" alt="Màn hình ứng dụng 4" style="width: 200px;" />
+</div>
+
 - **Schedule Training Sessions**: Trainers can schedule training sessions for their courses.
   - `POST /api/course/add-training/`: Add a training session.
   - `GET /api/course/delete-training/<pk>/`: Delete a training session.
