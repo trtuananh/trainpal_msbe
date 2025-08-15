@@ -144,33 +144,93 @@ Trainers can create courses (e.g., yoga, boxing) with details like title, descri
   <img src="demo/edit_course/pick_location.png" alt="Màn hình ứng dụng 4" style="width: 200px;" />
 </div>
 
-- **Schedule Training Sessions**: Trainers can schedule training sessions for their courses.
+#### Schedule Training Sessions
+Trainers can schedule training sessions for their courses.
+
+- **Endpoints**: 
   - `POST /api/course/add-training/`: Add a training session.
   - `GET /api/course/delete-training/<pk>/`: Delete a training session.
-- **View Bookings and Payments**: Trainers can view bookings and payments received for their sessions.
+
+- **Demo**:
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+  <img src="demo/add_training/course.png" alt="Màn hình ứng dụng 1" style="width: 200px;" />
+  <img src="demo/add_training/add_training.png" alt="Màn hình ứng dụng 2" style="width: 200px;" />
+  <img src="demo/add_training/training.png" alt="Màn hình ứng dụng 3" style="width: 200px;" />
+  <img src="demo/add_training/delete_training.png" alt="Màn hình ứng dụng 4" style="width: 200px;" />
+</div>
+
+#### View Bookings and Payments
+Trainers can view bookings and payments received for their sessions.
+
+- **Endpoints**: 
   - `GET /api/course/booking/`: List bookings for the trainer's courses.
   - `GET /api/payment/payments/`: List payments received.
 
-*Placeholder for Screenshot: [Insert image of trainer dashboard showing course creation or session scheduling here]*
-
 ### For Trainees
 Trainees can browse, book, pay for, and communicate about training sessions:
-- **Browse and Book Courses**: Trainees can search for courses using filters such as sport type (e.g., yoga, boxing), trainer, location, price, or level (beginner, intermediate, advanced). They can also find courses near their location using a map-based search, leveraging geolocation to display courses within a specified radius.
+
+#### Browse and Book Courses
+Trainees can search for courses using filters such as sport type (e.g., yoga, boxing), trainer, location, price, or level (beginner, intermediate, advanced). They can also find courses near their location using a map-based search, leveraging geolocation to display courses within a specified radius.
+
+- **Endpoints**: 
   - `GET /api/course/courses/`: List available courses with optional query parameters (e.g., `?sport=YG` for yoga, `?latlng=10.7769,106.7009&radius=5000` for courses within 5km).
   - `POST /api/course/add-booking/`: Book a training session.
-- **Make Payments**: Trainees can pay for sessions via MoMo or offline methods.
+
+- **Demo**:
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+  <img src="demo/find_course/find_course.png" alt="Màn hình ứng dụng 1" style="width: 200px;" />
+  <img src="demo/find_course/find_course_on_map.png" alt="Màn hình ứng dụng 1" style="width: 200px;" />
+  <img src="demo/find_course/find_course_on_map_1.png" alt="Màn hình ứng dụng 1" style="width: 200px;" />
+  <img src="demo/find_course/view_course.png" alt="Màn hình ứng dụng 3" style="width: 200px;" />
+  <img src="demo/find_course/view_map.png" alt="Màn hình ứng dụng 4" style="width: 200px;" />
+  <img src="demo/find_course/search_location.png" alt="Màn hình ứng dụng 4" style="width: 200px;" />
+  <img src="demo/find_course/direction.png" alt="Màn hình ứng dụng 4" style="width: 200px;" />
+  <img src="demo/add_booking/add_booking.png" alt="Màn hình ứng dụng 4" style="width: 200px;" />
+  <img src="demo/add_booking/booking.png" alt="Màn hình ứng dụng 4" style="width: 200px;" />
+</div>
+
+#### Make Payments
+Trainees can pay for sessions via MoMo or offline methods.
+
+- **Endpoints**: 
   - `POST /api/payment/create-payment/`: Create a payment.
   - `GET /api/payment/momo-payment/`: Initiate a MoMo payment.
-- **Messaging**: Trainees can chat with trainers in real-time to coordinate sessions.
+
+- **Demo**:
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+  <img src="demo/add_booking/confirm_booking.png" alt="Màn hình ứng dụng 1" style="width: 200px;" />
+  <img src="demo/add_booking/momo_payment.png" alt="Màn hình ứng dụng 2" style="width: 200px;" />
+  <img src="demo/add_booking/momo_payment_1.png" alt="Màn hình ứng dụng 1" style="width: 200px;" />
+  <img src="demo/add_booking/payment_success.png" alt="Màn hình ứng dụng 1" style="width: 200px;" />
+  <img src="demo/add_booking/payment_success_1.png" alt="Màn hình ứng dụng 3" style="width: 200px;" />
+  <img src="demo/add_booking/payments.png" alt="Màn hình ứng dụng 4" style="width: 200px;" />
+</div>
+  
+### Messaging
+Users can chat with each other in real-time to coordinate sessions.
+
+- **Endpoints**: 
   - `GET /api/message/chatroom/`: Get or create a chat room.
   - `GET /api/message/messages/<room_id>/`: Retrieve messages.
   - WebSocket: `ws://localhost:8000/ws/chat/<user_id>/` for real-time messaging.
 
-*Placeholder for Screenshot: [Insert image of trainee dashboard showing course browsing with filters or map-based search here]*
+- **Demo**:
+
+![Message](demo/message/message.png)
+![Message](demo/message/message_1.png)
+![Message](demo/message/message_2.png)
+
+### More Settings
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+  <img src="demo/setting/select_language.png" alt="Màn hình ứng dụng 1" style="width: 200px;" />
+  <img src="demo/setting/vietnamese.png" alt="Màn hình ứng dụng 2" style="width: 200px;" />
+  <img src="demo/setting/light_mode.png" alt="Màn hình ứng dụng 1" style="width: 200px;" />
+  <img src="demo/setting/light_mode_1.png" alt="Màn hình ứng dụng 1" style="width: 200px;" />
+</div>
 
 ## Links
-- **Frontend Repository**: Explore the TrainPal mobile frontend code at [https://github.com/your-repo/trainpal_frontend](https://github.com/your-repo/trainpal_frontend).
-- **Video Demo**: Watch a demo of the TrainPal application in action at [https://www.youtube.com/your-video-demo](https://www.youtube.com/your-video-demo).
+- **Frontend Repository**: Explore the TrainPal mobile frontend code at [https://github.com/trtuananh/TrainPal.git](https://github.com/trtuananh/TrainPal.git).
+- **Video Demo**: See more video demo of the TrainPal application in action at [https://www.notion.so/Introduction-1f13423227ea81f1be10f0405e3b59a1?source=copy_link](https://www.notion.so/Introduction-1f13423227ea81f1be10f0405e3b59a1?source=copy_link).
 
 ## Contributing
 Contributions are welcome! Please fork the repository, create a new branch, and submit a pull request with your changes. Ensure that your code adheres to the project's coding standards and includes tests.
